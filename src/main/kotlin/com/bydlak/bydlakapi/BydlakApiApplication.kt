@@ -7,5 +7,6 @@ import org.springframework.boot.runApplication
 class BydlakApiApplication
 
 fun main(args: Array<String>) {
+    println("dupa")
     runApplication<BydlakApiApplication>(*args)
 }
