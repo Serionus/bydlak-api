@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class MainController(private val service: MainService) {
 
-
     @PostMapping("/login")
     fun login(@RequestParam userUID: String) = service.login(userUID)
 

@@ -10,11 +10,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class MainService {
-    private val firebase = FirebaseAuth.getInstance()
     private val loggedUsers = mutableListOf<User>()
-    private val firestore = FirestoreClient.getFirestore(FirebaseApp.getInstance())
 
     fun login(userUID: String) {
+        val firestore = FirestoreClient.getFirestore(FirebaseApp.getInstance())
         val data = firestore.collection("users").listDocuments()
         val userFromDb = data.find { it.get().get()["uid"] == userUID }!!.get().get().toObject(User::class.java)
         if (userFromDb != null) {
@@ -27,6 +26,7 @@ class MainService {
     }
 
     fun addChild(userUID: String, childEmail: String, childPassword: String) {
+        val firebase = FirebaseAuth.getInstance()
         val user = loggedUsers.find { it.uid == userUID }
         if (user!!.parent) {
             firebase.createUser(UserRecord.CreateRequest().setEmail(childEmail).setPassword(childPassword))
@@ -49,7 +49,7 @@ class MainService {
         loggedUsers.getUser(userUID)!!.alarms.removeIf { it.alarmId == alarmToBeUpdatedID }
 }
 
-class UserIsNotParentException : RuntimeException(message = "User is not parent. Can't perform action.")
+class UserIsNotParentException : RuntimeException()
 
 private fun MutableList<User>.getUser(userUID: String) = this.find { it.uid == userUID }
 
