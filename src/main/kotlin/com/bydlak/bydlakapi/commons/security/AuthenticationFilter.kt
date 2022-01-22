@@ -34,4 +34,4 @@ class AuthenticationFilter(
     }
 }
 
-private fun toUser(token: FirebaseToken) = User(token.uid, token.email)
+fun toUser(token: FirebaseToken) = User(token.uid, token.email)
