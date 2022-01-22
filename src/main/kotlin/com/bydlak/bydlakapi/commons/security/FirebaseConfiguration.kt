@@ -10,10 +10,10 @@ import javax.annotation.PostConstruct
 @Configuration
 class FirebaseConfiguration(@Value("\${fb.accountKey}") val accountKey: String) {
 
-//    @PostConstruct
-//    fun init() {
-//        FirebaseApp.initializeApp(
-//            FirebaseOptions.builder().setCredentials(GoogleCredentials.fromStream(accountKey.byteInputStream())).build()
-//        )
-//    }
+    @PostConstruct
+    fun init() {
+        FirebaseApp.initializeApp(
+            FirebaseOptions.builder().setCredentials(GoogleCredentials.fromStream(accountKey.byteInputStream())).build()
+        )
+    }
 }
