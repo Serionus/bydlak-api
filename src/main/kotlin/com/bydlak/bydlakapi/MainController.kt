@@ -1,13 +1,14 @@
 package com.bydlak.bydlakapi
 
 import com.bydlak.bydlakapi.alarm.Alarm
+import com.bydlak.bydlakapi.commons.security.User
 import org.springframework.web.bind.annotation.*
 
 @RestController
 class MainController(private val service: MainService) {
 
     @PostMapping("/login")
-    fun login(@RequestParam userUID: String) = service.login(userUID)
+    fun login(@RequestParam userUID: String) : User? = service.login(userUID)
 
     @PostMapping("/logout")
     fun logout(@RequestParam userUID: String) = service.logout(userUID)

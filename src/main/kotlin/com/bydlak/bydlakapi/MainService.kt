@@ -12,13 +12,14 @@ import org.springframework.stereotype.Service
 class MainService {
     private val loggedUsers = mutableListOf<User>()
 
-    fun login(userUID: String) {
+    fun login(userUID: String) : User? {
         val firestore = FirestoreClient.getFirestore(FirebaseApp.getInstance())
         val data = firestore.collection("users").listDocuments()
         val userFromDb = data.find { it.get().get()["uid"] == userUID }!!.get().get().toObject(User::class.java)
-        if (userFromDb != null) {
+        return if (userFromDb != null) {
             loggedUsers.add(userFromDb)
-        }
+            userFromDb
+        } else null
     }
 
     fun logout(userUID: String) {
