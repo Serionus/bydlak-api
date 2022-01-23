@@ -2,8 +2,6 @@ package com.bydlak.bydlakapi.commons.security
 
 import com.bydlak.bydlakapi.alarm.Alarm
 
-data class User(val uid: String, val email: String, val parent: Boolean = false) {
-    val children: MutableList<String>? = if (parent) mutableListOf() else null
-    val parentID: MutableList<String>? = if (parent) null else mutableListOf()
+data class User(val uid: String, val email: String, val isParent: Boolean, val parentID: String? = null) {
     val alarms: MutableList<Alarm> = mutableListOf()
 }
