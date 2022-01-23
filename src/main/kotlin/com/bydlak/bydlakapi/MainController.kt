@@ -10,6 +10,9 @@ class MainController(private val service: MainService) {
     @GetMapping("/users")
     fun getUsers() = service.getUsers()
 
+    @PostMapping("/users")
+    fun clearUsers() = service.removeAllUsers()
+
     @PostMapping("/login")
     fun login(@RequestParam userUID: String) : User? = service.login(userUID)
 

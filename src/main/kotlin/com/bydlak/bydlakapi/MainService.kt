@@ -16,6 +16,8 @@ class MainService {
 
     fun getUsers() = loggedUsers
 
+    fun removeAllUsers() = loggedUsers.clear()
+
     fun login(userUID: String) : User? {
         val firestore = FirestoreClient.getFirestore(FirebaseApp.getInstance())
         val docRef: DocumentReference = firestore.collection("users").document(userUID)
