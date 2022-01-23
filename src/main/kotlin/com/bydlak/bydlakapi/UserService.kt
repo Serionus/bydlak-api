@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserService {
-    private val existingUsers = mutableListOf<User>()
+    private val loggedUsers = mutableListOf<User>()
 
-    fun getAllUsers() = existingUsers
+    fun getAllUsers() = loggedUsers
 
-    fun clearServerData() = existingUsers.clear()
+    fun clearServerData() = loggedUsers.clear()
 
-    fun removeFromServer(userUID: String) = existingUsers.removeIf { it.uid == userUID }
+    fun removeFromServer(userUID: String) = loggedUsers.removeIf { it.uid == userUID }
 
     fun addToServer(userUID: String): User? {
         val firestore = FirestoreClient.getFirestore(FirebaseApp.getInstance())
@@ -32,8 +32,8 @@ class UserService {
         } else null
 
         return if (userFromDb != null) {
-            if (existingUsers.find { it.uid == userUID } == null) {
-                existingUsers.add(userFromDb)
+            if (loggedUsers.find { it.uid == userUID } == null) {
+                loggedUsers.add(userFromDb)
             }
             userFromDb
         } else {
@@ -42,23 +42,23 @@ class UserService {
     }
 
     fun deleteUserAccount(userUID: String) {
-        val user = existingUsers.find { it.uid == userUID } ?: return
+        val user = loggedUsers.find { it.uid == userUID } ?: return
         val firebase = FirebaseAuth.getInstance()
         val firestore = FirestoreClient.getFirestore(FirebaseApp.getInstance())
         if (user.isParent) {
-            existingUsers.filter { it.parentID == userUID }.forEach {
+            loggedUsers.filter { it.parentID == userUID }.forEach {
                 firebase.deleteUser(it.uid)
                 firestore.collection("users").document(it.uid).delete()
             }
-            existingUsers.removeIf { it.parentID == userUID }
+            loggedUsers.removeIf { it.parentID == userUID }
         }
         firebase.deleteUser(userUID)
         firestore.collection("users").document(userUID).delete()
-        existingUsers.removeIf { it.uid == userUID }
+        loggedUsers.removeIf { it.uid == userUID }
     }
 
     fun addChild(userUID: String, childEmail: String, childPassword: String) {
-        val user = existingUsers.find { it.uid == userUID } ?: return
+        val user = loggedUsers.find { it.uid == userUID } ?: return
         if (user.isParent) {
             val firebase = FirebaseAuth.getInstance()
             val firestore = FirestoreClient.getFirestore(FirebaseApp.getInstance())
@@ -66,25 +66,25 @@ class UserService {
                 firebase.createUser(UserRecord.CreateRequest().setEmail(childEmail).setPassword(childPassword))
             val child = User(childInstance.uid, childEmail, false, userUID)
             firestore.collection("users").document(childInstance.uid).set(child)
-            existingUsers.add(child)
+            loggedUsers.add(child)
         } else {
             throw UserIsNotParentException()
         }
     }
 
-    fun getParentChildren(userUID: String) = existingUsers.filter { it.parentID == userUID }
+    fun getParentChildren(userUID: String) = loggedUsers.filter { it.parentID == userUID }
 
-    fun getUserAlarms(userUID: String): List<Alarm> = existingUsers.getUser(userUID)!!.alarms
+    fun getUserAlarms(userUID: String): List<Alarm> = loggedUsers.getUser(userUID)!!.alarms
 
     fun createAlarm(userUID: String, alarm: Alarm) {
-        existingUsers.getUser(userUID)!!.alarms.add(alarm)
+        loggedUsers.getUser(userUID)!!.alarms.add(alarm)
     }
 
     fun updateAlarm(userUID: String, updatedAlarm: Alarm) =
-        existingUsers.getUser(userUID)!!.alarms.replaceAll { if (it.alarmId == updatedAlarm.alarmId) updatedAlarm else it }
+        loggedUsers.getUser(userUID)!!.alarms.replaceAll { if (it.alarmId == updatedAlarm.alarmId) updatedAlarm else it }
 
     fun removeAlarm(userUID: String, alarmToBeRemovedID: Int) =
-        existingUsers.getUser(userUID)!!.alarms.removeIf { it.alarmId == alarmToBeRemovedID }
+        loggedUsers.getUser(userUID)!!.alarms.removeIf { it.alarmId == alarmToBeRemovedID }
 }
 
 class UserIsNotParentException : RuntimeException()
