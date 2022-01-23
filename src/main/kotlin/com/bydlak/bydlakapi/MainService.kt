@@ -19,7 +19,7 @@ class MainService {
         return if (userFromDb != null) {
             loggedUsers.add(userFromDb)
             userFromDb
-        } else null
+        } else throw UserNotFoundException()
     }
 
     fun logout(userUID: String) {
@@ -51,6 +51,7 @@ class MainService {
 }
 
 class UserIsNotParentException : RuntimeException()
+class UserNotFoundException : RuntimeException()
 
 private fun MutableList<User>.getUser(userUID: String) = this.find { it.uid == userUID }
 
