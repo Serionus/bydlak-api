@@ -2,11 +2,13 @@ package com.bydlak.bydlakapi
 
 import com.bydlak.bydlakapi.alarm.Alarm
 import com.bydlak.bydlakapi.commons.security.User
+import com.google.cloud.firestore.DocumentReference
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
 import com.google.firebase.cloud.FirestoreClient
 import org.springframework.stereotype.Service
+
 
 @Service
 class MainService {
@@ -14,8 +16,12 @@ class MainService {
 
     fun login(userUID: String) : User? {
         val firestore = FirestoreClient.getFirestore(FirebaseApp.getInstance())
-        val data = firestore.collection("users").listDocuments()
-        val userFromDb = data.find { it.get().get()["uid"] == userUID }!!.get().get().toObject(User::class.java)
+        val docRef: DocumentReference = firestore.collection("users").document(userUID)
+        val future = docRef.get()
+        val document = future.get()
+        val userFromDb : User? = if (document.exists()) {
+            User(document["uid"] as String, document["email"] as String, document["parent"] as Boolean)
+        } else null
         return if (userFromDb != null) {
             loggedUsers.add(userFromDb)
             userFromDb
