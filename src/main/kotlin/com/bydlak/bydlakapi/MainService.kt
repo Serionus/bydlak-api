@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service
 class MainService {
     private val loggedUsers = mutableListOf<User>()
 
+    fun getUsers() = loggedUsers
+
     fun login(userUID: String) : User? {
         val firestore = FirestoreClient.getFirestore(FirebaseApp.getInstance())
         val docRef: DocumentReference = firestore.collection("users").document(userUID)

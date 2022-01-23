@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class MainController(private val service: MainService) {
 
+    @GetMapping("/users")
+    fun getUsers() = service.getUsers()
+
     @PostMapping("/login")
     fun login(@RequestParam userUID: String) : User? = service.login(userUID)
 
