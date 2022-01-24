@@ -26,7 +26,7 @@ class UserService {
             User(
                 uid = document["uid"] as String,
                 email = document["email"] as String,
-                isParent = document["isParent"] as Boolean,
+                isParent = document["parent"] as Boolean,
                 parentID = document["parentID"] as String
             )
         } else null
