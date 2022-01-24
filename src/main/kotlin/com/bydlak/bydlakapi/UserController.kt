@@ -9,8 +9,8 @@ class UserController(private val userService: UserService) {
 
     @GetMapping("/users")
     fun getUsers(): MutableList<User> = userService.getAllUsers()
-
-    @DeleteMapping("/users")
+    // /all because of conflict between two mappings on same endpoint
+    @DeleteMapping("/users/all")
     fun clearUsers() = userService.clearServerData()
 
     @PostMapping("/users")
@@ -26,7 +26,7 @@ class UserController(private val userService: UserService) {
     fun addChild(@RequestParam userUID: String, @RequestParam childEmail: String, @RequestParam childPassword: String) =
         userService.addChild(userUID, childEmail, childPassword)
 
-    @GetMapping("children")
+    @GetMapping("/children")
     fun getChildren(@RequestParam userUID: String) = userService.getParentChildren(userUID)
 
     @GetMapping("/alarms")
