@@ -28,10 +28,10 @@ class AuthenticationFilter(
             val user = toUser(decoded)
             val authority = SimpleGrantedAuthority("ROLE_USER")
             val authentication = UsernamePasswordAuthenticationToken(user, null, listOf(authority))
-            SecurityContextHolder.getContext().setAuthentication(authentication)
+            SecurityContextHolder.getContext().authentication = authentication
             filterChain.doFilter(request, response)
         }
     }
 }
 
-fun toUser(token: FirebaseToken) = User(token.uid, token.email)
+private fun toUser(token: FirebaseToken) = User(token.uid, token.email, false)
