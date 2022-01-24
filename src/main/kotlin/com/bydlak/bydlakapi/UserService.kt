@@ -81,7 +81,7 @@ class UserService {
     fun updateAlarm(userUID: String, updatedAlarm: Alarm) =
         loggedUsers.getUser(userUID)!!.alarms.replaceAll { if (it.id == updatedAlarm.id) updatedAlarm else it }
 
-    fun removeAlarm(userUID: String, alarmToBeRemovedID: Int) =
+    fun removeAlarm(userUID: String, alarmToBeRemovedID: Long) =
         loggedUsers.getUser(userUID)!!.alarms.removeIf { it.id == alarmToBeRemovedID }
 }
 

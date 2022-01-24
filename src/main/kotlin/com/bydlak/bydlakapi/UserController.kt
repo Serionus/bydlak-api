@@ -41,6 +41,6 @@ class UserController(private val userService: UserService) {
         userService.updateAlarm(userUID, alarm)
 
     @DeleteMapping("/alarms")
-    fun removeAlarm(@RequestParam userUID: String, @RequestParam alarmId: Int) =
+    fun removeAlarm(@RequestParam userUID: String, @RequestParam alarmId: Long) =
         userService.removeAlarm(userUID, alarmId)
 }
