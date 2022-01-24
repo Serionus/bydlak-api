@@ -1,10 +1,10 @@
 package com.bydlak.bydlakapi.alarm
 
-import java.time.LocalTime
+import java.time.LocalDateTime
 
 data class Alarm(
-    val alarmId: Int,
-    val time: LocalTime,
-    val days: List<Day>,
-    val recurringDays: List<Boolean>
+    val id: Int,
+    val title: String,
+    val hour: LocalDateTime,
+    val recurring: HashMap<Day, Boolean>
 )

@@ -76,15 +76,13 @@ class UserService {
 
     fun getUserAlarms(userUID: String): List<Alarm> = loggedUsers.getUser(userUID)!!.alarms
 
-    fun createAlarm(userUID: String, alarm: Alarm) {
-        loggedUsers.getUser(userUID)!!.alarms.add(alarm)
-    }
+    fun createAlarm(userUID: String, alarm: Alarm) = loggedUsers.getUser(userUID)!!.alarms.add(alarm)
 
     fun updateAlarm(userUID: String, updatedAlarm: Alarm) =
-        loggedUsers.getUser(userUID)!!.alarms.replaceAll { if (it.alarmId == updatedAlarm.alarmId) updatedAlarm else it }
+        loggedUsers.getUser(userUID)!!.alarms.replaceAll { if (it.id == updatedAlarm.id) updatedAlarm else it }
 
     fun removeAlarm(userUID: String, alarmToBeRemovedID: Int) =
-        loggedUsers.getUser(userUID)!!.alarms.removeIf { it.alarmId == alarmToBeRemovedID }
+        loggedUsers.getUser(userUID)!!.alarms.removeIf { it.id == alarmToBeRemovedID }
 }
 
 class UserIsNotParentException : RuntimeException()
